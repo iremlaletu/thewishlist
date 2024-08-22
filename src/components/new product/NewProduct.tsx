@@ -13,6 +13,7 @@ const NewProduct = () => {
     ProductName: string;
     ProductUrl: string;
     ProductPrice: number;
+    ProductText: string;
   }) => {
     addProduct(newProductData); // Context
   };

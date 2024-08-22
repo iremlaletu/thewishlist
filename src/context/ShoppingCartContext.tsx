@@ -27,6 +27,7 @@ type Product = {
   ProductName: string;
   ProductUrl: string;
   ProductPrice: number;
+  ProductText: string;
 };
 
 const ShoppingCartContext = createContext({} as ShoppingCartContext);

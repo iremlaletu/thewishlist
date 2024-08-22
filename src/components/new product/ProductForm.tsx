@@ -9,12 +9,14 @@ type ProductFormProps = {
     ProductName: string;
     ProductUrl: string;
     ProductPrice: number;
+    ProductText: string;
   }) => void;
   products: Array<{
     id: number;
     ProductName: string;
     ProductUrl: string;
     ProductPrice: number;
+    ProductText: string;
   }>;
 };
 
@@ -27,6 +29,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const [ProductName, setProductName] = useState("");
   const [ProductPrice, setProductPrice] = useState("");
   const [ProductUrl, setProductUrl] = useState("");
+  const [ProductText, setProductText] = useState("");
 
   const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProductName(e.target.value);
@@ -40,6 +43,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
     setProductUrl(e.target.value);
   };
 
+  const textChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setProductText(e.target.value);
+  };
+
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
 
@@ -48,12 +55,14 @@ const ProductForm: React.FC<ProductFormProps> = ({
       ProductName: ProductName,
       ProductUrl: ProductUrl,
       ProductPrice: parseFloat(ProductPrice),
+      ProductText: ProductText,
     };
 
     onSaveProduct(newProductData);
     setProductName("");
     setProductPrice("");
     setProductUrl("");
+    setProductText("");
   };
 
   return (
@@ -77,7 +86,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 <input
                   type="text"
                   className="form-control"
-                  id="validationServer01"
+                  id="exampleFormControlInput1"
                   placeholder="Enter product name.."
                   onChange={titleChangeHandler}
                   value={ProductName}
@@ -87,13 +96,16 @@ const ProductForm: React.FC<ProductFormProps> = ({
               <div className="col-md-12 mb-3">
                 <div className="input-group">
                   <div className="input-group-prepend">
-                    <span className="input-group-text" id="inputGroupPrepend3">
+                    <span
+                      className="input-group-text"
+                      id="exampleFormControlInput2"
+                    >
                       $
                     </span>
                   </div>
                   <input
                     className="form-control"
-                    id="validationServer02"
+                    id="exampleFormControlInput3"
                     type="number"
                     placeholder="Enter product price.."
                     onChange={priceChangeHandler}
@@ -106,18 +118,28 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 <input
                   type="text"
                   className="form-control"
-                  id="validationServer03"
+                  id="exampleFormControlInput4"
                   placeholder="Enter product URL"
                   onChange={urlChangeHandler}
                   value={ProductUrl}
                   required
                 />
               </div>
+              <div className="form-group">
+                <label htmlFor="exampleFormControlTextarea1">Detail</label>
+                <textarea
+                  className="form-control"
+                  id="exampleFormControlTextarea1"
+                  rows={3}
+                  onChange={textChangeHandler}
+                  value={ProductText}
+                ></textarea>
+              </div>
             </div>
             <Stack
               direction="horizontal"
               gap={3}
-              className="justify-content-end"
+              className="justify-content-end pt-5"
             >
               <Button type="submit" variant="outline-success">
                 Add Product

@@ -7,6 +7,7 @@ type StoreItemProps = {
   ProductName: string;
   ProductPrice: number;
   ProductUrl: string;
+  ProductText: string;
 };
 
 export function StoreItem({
@@ -14,6 +15,7 @@ export function StoreItem({
   ProductName,
   ProductPrice,
   ProductUrl,
+  ProductText,
 }: StoreItemProps) {
   const {
     getItemQuantity,
@@ -66,6 +68,7 @@ export function StoreItem({
               </Button>
             </div>
           )}
+          <div className="pt-2"> {ProductText} </div>
         </div>
       </Card.Body>
     </Card>
