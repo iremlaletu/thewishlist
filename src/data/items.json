@@ -1,0 +1,21 @@
+[
+    {
+        "id": 1,
+        "ProductName": "Book",
+        "ProductPrice": 10.99,
+        "ProductUrl": "https://placehold.co/400"
+    },
+  
+    {
+        "id": 2,
+        "ProductName": "Book",
+        "ProductPrice": 10.99,
+        "ProductUrl": "https://placehold.co/400"
+    },
+    {
+        "id": 3,
+        "ProductName": "Book",
+        "ProductPrice": 10.99,
+        "ProductUrl": "https://placehold.co/400"
+    }
+]

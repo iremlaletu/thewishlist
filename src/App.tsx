@@ -4,9 +4,10 @@ import Home from "./pages/Home";
 import Store from "./pages/Store";
 import Navbar from "./components/Navbar";
 import { AnimatePresence } from "framer-motion";
+import { ShoppingCartProvider } from "./context/ShoppingCartContext";
 function App() {
   return (
-    <>
+    <ShoppingCartProvider>
       <Navbar />
       <Container className="mb-4">
         <AnimatePresence>
@@ -16,7 +17,7 @@ function App() {
           </Routes>
         </AnimatePresence>
       </Container>
-    </>
+    </ShoppingCartProvider>
   );
 }
 
