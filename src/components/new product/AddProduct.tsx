@@ -1,16 +1,12 @@
 import { Button } from "react-bootstrap";
 
 type AddProductProps = {
-  setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleShow: () => void;
 };
-export default function AddProduct({ setIsFormOpen }: AddProductProps) {
+export default function AddProduct({ handleShow }: AddProductProps) {
   return (
     <div>
-      <Button
-        variant="outline-secondary"
-        size="lg"
-        onClick={() => setIsFormOpen(true)}
-      >
+      <Button variant="outline-secondary" className="p-4" onClick={handleShow}>
         Add New Product
       </Button>
     </div>

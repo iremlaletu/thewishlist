@@ -10,13 +10,15 @@ const Store = () => {
     <>
       <h1>Your Store</h1>
       <NewProduct />
-      <Row md={2} xs={1} lg={3} className="g-3">
-        {products.map((item) => (
-          <Col key={item.id}>
-            <StoreItem {...item} />
-          </Col>
-        ))}
-      </Row>
+      <div className="pt-5">
+        <Row md={2} xs={1} lg={3} className="g-3">
+          {products.map((item) => (
+            <Col key={item.id}>
+              <StoreItem {...item} />
+            </Col>
+          ))}
+        </Row>
+      </div>
     </>
   );
 };

@@ -20,7 +20,7 @@ export function ShoppingCart({ isOpen }: ShoppingCartProps) {
             <CartItem key={item.id} {...item} />
           ))}
           <div className="ms-auto fw-bold fs-5">
-            Total:{" "}
+            Total:
             {formatCurrency(
               cartItems.reduce((total, cartItem) => {
                 const item = products.find((i) => i.id === cartItem.id);

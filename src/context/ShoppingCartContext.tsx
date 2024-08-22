@@ -1,5 +1,6 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 import { ShoppingCart } from "../components/ShoppingCart";
+import { CartItem } from "../components/CartItem";
 
 type ShoppingCartProviderProps = {
   children: ReactNode;

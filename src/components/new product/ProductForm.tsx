@@ -1,7 +1,9 @@
 import React, { useState, FormEvent } from "react";
+import { Button, Modal, Stack } from "react-bootstrap";
 
 type ProductFormProps = {
-  setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleClose: () => void;
+  isFormOpen: boolean;
   onSaveProduct: (product: {
     id: number;
     ProductName: string;
@@ -17,18 +19,17 @@ type ProductFormProps = {
 };
 
 const ProductForm: React.FC<ProductFormProps> = ({
-  setIsFormOpen,
+  handleClose,
+  isFormOpen,
   onSaveProduct,
   products,
 }) => {
   const [ProductName, setProductName] = useState("");
   const [ProductPrice, setProductPrice] = useState("");
   const [ProductUrl, setProductUrl] = useState("");
-  const [isValid, setIsValid] = useState(true);
 
   const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProductName(e.target.value);
-    setIsValid(e.target.value.trim().length > 0);
   };
 
   const priceChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,11 +43,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
 
-    if (ProductName.trim().length === 0) {
-      setIsValid(false);
-      return;
-    }
-
     const newProductData = {
       id: products.length + 1,
       ProductName: ProductName,
@@ -58,48 +54,86 @@ const ProductForm: React.FC<ProductFormProps> = ({
     setProductName("");
     setProductPrice("");
     setProductUrl("");
-    setIsValid(true);
   };
 
   return (
-    <form onSubmit={submitHandler} className="">
-      <div className="">
-        <label>Product Name</label>
-        <input
-          type="text"
-          placeholder="Enter product name.."
-          onChange={titleChangeHandler}
-          value={ProductName}
-          className={` ${isValid ? "border-black" : "border-red-500"}`}
-        />
-      </div>
-      <div className="">
-        <label>Product Price $</label>
-        <input
-          type="number"
-          placeholder="Enter product price.."
-          onChange={priceChangeHandler}
-          value={ProductPrice}
-          className=""
-        />
-      </div>
-      <div className="">
-        <label>Product Image</label>
-        <input
-          type="text"
-          placeholder="Enter product URL"
-          onChange={urlChangeHandler}
-          value={ProductUrl}
-          className=""
-        />
-      </div>
-      <div className="">
-        <button className="">Add Product</button>
-        <button className="" onClick={() => setIsFormOpen(false)} type="button">
-          Cancel
-        </button>
-      </div>
-    </form>
+    <>
+      <Modal
+        show={isFormOpen}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Product to Consider</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={submitHandler}>
+            <div className="form-row">
+              <div className="col-md-12 mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="validationServer01"
+                  placeholder="Enter product name.."
+                  onChange={titleChangeHandler}
+                  value={ProductName}
+                  required
+                />
+              </div>
+              <div className="col-md-12 mb-3">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text" id="inputGroupPrepend3">
+                      $
+                    </span>
+                  </div>
+                  <input
+                    className="form-control"
+                    id="validationServer02"
+                    type="number"
+                    placeholder="Enter product price.."
+                    onChange={priceChangeHandler}
+                    value={ProductPrice}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="col-md-12 mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="validationServer03"
+                  placeholder="Enter product URL"
+                  onChange={urlChangeHandler}
+                  value={ProductUrl}
+                  required
+                />
+              </div>
+            </div>
+            <Stack
+              direction="horizontal"
+              gap={3}
+              className="justify-content-end"
+            >
+              <Button type="submit" variant="outline-success">
+                Add Product
+              </Button>
+              <Button
+                variant="outline-danger"
+                onClick={handleClose}
+                type="button"
+              >
+                Cancel
+              </Button>
+            </Stack>
+          </form>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 };
 

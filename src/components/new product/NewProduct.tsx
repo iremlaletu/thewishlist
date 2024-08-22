@@ -5,6 +5,8 @@ import { useShoppingCart } from "../../context/ShoppingCartContext";
 
 const NewProduct = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const handleClose = () => setIsFormOpen(false);
+  const handleShow = () => setIsFormOpen(true);
   const { addProduct, products } = useShoppingCart();
   const handleSaveProduct = (newProductData: {
     id: number;
@@ -12,20 +14,22 @@ const NewProduct = () => {
     ProductUrl: string;
     ProductPrice: number;
   }) => {
-    addProduct(newProductData); // Context işlevini çağırıyoruz
+    addProduct(newProductData); // Context
   };
 
   return (
     <div>
-      {isFormOpen ? (
-        <ProductForm
-          setIsFormOpen={setIsFormOpen}
-          onSaveProduct={handleSaveProduct}
-          products={products}
-        />
-      ) : (
-        <AddProduct setIsFormOpen={setIsFormOpen} />
-      )}
+      {
+        <>
+          <ProductForm
+            onSaveProduct={handleSaveProduct}
+            products={products}
+            handleClose={handleClose}
+            isFormOpen={isFormOpen}
+          />
+          <AddProduct handleShow={handleShow} />
+        </>
+      }
     </div>
   );
 };
