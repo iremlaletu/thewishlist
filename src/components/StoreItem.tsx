@@ -1,9 +1,7 @@
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Stack } from "react-bootstrap";
 import { formatCurrency } from "../utils/formatCurrency";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { Product } from "../types";
-import { useState } from "react";
-import ProductForm from "./new product/ProductForm";
 
 export function StoreItem(product: Product) {
   const {
@@ -11,18 +9,14 @@ export function StoreItem(product: Product) {
     increaseCartQuantity,
     decreaseCartQuantity,
     removeFromCart,
-    updateProduct,
-    products,
+    openProductForm,
+    removeProduct,
   } = useShoppingCart();
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleEdit = (updatedProduct: Product) => {
-    updateProduct(updatedProduct);
-    setIsEditing(false);
-  };
 
   const quantity = getItemQuantity(product.id);
-
+  const handleDelete = (id: number) => {
+    removeProduct(id);
+  };
   return (
     <>
       <Card className="h-100">
@@ -75,25 +69,30 @@ export function StoreItem(product: Product) {
                 </Button>
               </div>
             )}
-            <div className="pt-2 pb-2"> {product.ProductText} </div>
-            <Button
-              variant="outline-warning"
-              onClick={() => setIsEditing(true)}
+            <div className="pt-2 pb-1"> {product.ProductText} </div>
+            <Stack
+              direction="horizontal"
+              gap={3}
+              className="justify-content-end pt-5"
             >
-              Edit Product
-            </Button>
+              <Button
+                variant="outline-warning"
+                size="lg"
+                onClick={() => openProductForm(product)}
+              >
+                Edit
+              </Button>
+              <Button
+                variant="outline-danger"
+                size="lg"
+                onClick={() => handleDelete(product.id)}
+              >
+                Delete
+              </Button>
+            </Stack>
           </div>
         </Card.Body>
       </Card>
-      {isEditing && (
-        <ProductForm
-          handleClose={() => setIsEditing(false)}
-          isFormOpen={isEditing}
-          onSaveProduct={handleEdit}
-          editProduct={product}
-          products={products}
-        />
-      )}
     </>
   );
 }

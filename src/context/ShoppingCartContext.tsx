@@ -16,9 +16,14 @@ type ShoppingCartContext = {
   removeFromCart: (id: number) => void;
   cartQuantity: number;
   cartItems: CartItem[];
-  addProduct: (product: Product) => void;
-  updateProduct: (product: Product) => void;
-  products: Product[]; // Ürünler listesi
+  products: Product[];
+  isFormOpen: boolean;
+  productToEdit: Product | null;
+  openProductForm: (product?: Product) => void;
+  closeProductForm: () => void;
+  handleAddProduct: () => void;
+  handleFormSubmit: (product: Product) => void;
+  removeProduct: (id: number) => void;
 };
 
 type CartItem = {
@@ -34,8 +39,43 @@ export function useShoppingCart() {
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState<Product | null>(null);
+
+  const handleAddProduct = () => {
+    setProductToEdit(null); // Reset form for new product
+    setIsFormOpen(true);
+  };
+
+  const handleFormSubmit = (product: Product) => {
+    setProducts((currProducts) => {
+      const existingProduct = currProducts.find(
+        (item) => item.id === product.id
+      );
+      if (existingProduct) {
+        // Ürün varsa güncelle
+        return currProducts.map((item) =>
+          item.id === product.id ? product : item
+        );
+      }
+      // Ürün yoksa yeni ürün ekle
+      return [...currProducts, product];
+    });
+  };
+
+  const closeProductForm = () => setIsFormOpen(false);
+
+  const openProductForm = (product?: Product) => {
+    setProductToEdit(product || null);
+    setIsFormOpen(true);
+  };
+  const removeProduct = (id: number) => {
+    setProducts((currProducts) => {
+      return currProducts.filter((item) => item.id !== id);
+    });
+  };
 
   const cartQuantity = cartItems.reduce(
     (quantity, item) => item.quantity + quantity,
@@ -81,21 +121,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       return currItems.filter((item) => item.id !== id);
     });
   }
-  function addProduct(product: Product) {
-    setProducts((currProducts) => {
-      if (currProducts.find((item) => item.id === product.id)) {
-        return currProducts; // Ürün zaten varsa ekleme
-      }
-      return [...currProducts, product];
-    });
-  }
-  function updateProduct(updatedProduct: Product) {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === updatedProduct.id ? updatedProduct : product
-      )
-    );
-  }
 
   return (
     <ShoppingCartContext.Provider
@@ -108,9 +133,14 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         cartQuantity,
         openCart,
         closeCart,
-        addProduct,
-        updateProduct,
         products,
+        openProductForm,
+        closeProductForm,
+        isFormOpen,
+        productToEdit,
+        handleAddProduct,
+        handleFormSubmit,
+        removeProduct,
       }}
     >
       {children}
