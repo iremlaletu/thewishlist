@@ -1,35 +1,32 @@
 import React, { useState, FormEvent } from "react";
 import { Button, Modal, Stack } from "react-bootstrap";
+import { Product } from "../../types";
 
 type ProductFormProps = {
   handleClose: () => void;
   isFormOpen: boolean;
-  onSaveProduct: (product: {
-    id: number;
-    ProductName: string;
-    ProductUrl: string;
-    ProductPrice: number;
-    ProductText: string;
-  }) => void;
-  products: Array<{
-    id: number;
-    ProductName: string;
-    ProductUrl: string;
-    ProductPrice: number;
-    ProductText: string;
-  }>;
+  onSaveProduct: (product: Product) => void;
+  editProduct?: Product;
+  products: Product[];
 };
 
 const ProductForm: React.FC<ProductFormProps> = ({
   handleClose,
   isFormOpen,
   onSaveProduct,
+  editProduct,
   products,
 }) => {
-  const [ProductName, setProductName] = useState("");
-  const [ProductPrice, setProductPrice] = useState("");
-  const [ProductUrl, setProductUrl] = useState("");
-  const [ProductText, setProductText] = useState("");
+  const [ProductName, setProductName] = useState(
+    editProduct?.ProductName || ""
+  );
+  const [ProductPrice, setProductPrice] = useState(
+    (editProduct?.ProductPrice || 0).toString()
+  );
+  const [ProductUrl, setProductUrl] = useState(editProduct?.ProductUrl || "");
+  const [ProductText, setProductText] = useState(
+    editProduct?.ProductText || ""
+  );
 
   const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProductName(e.target.value);
@@ -50,19 +47,16 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
 
-    const newProductData = {
-      id: products.length + 1,
-      ProductName: ProductName,
-      ProductUrl: ProductUrl,
+    const updatedProductData = {
+      id: editProduct ? editProduct.id : products.length + 1,
+      ProductName,
+      ProductUrl,
       ProductPrice: parseFloat(ProductPrice),
-      ProductText: ProductText,
+      ProductText,
     };
 
-    onSaveProduct(newProductData);
-    setProductName("");
-    setProductPrice("");
-    setProductUrl("");
-    setProductText("");
+    onSaveProduct(updatedProductData);
+    handleClose();
   };
 
   return (
@@ -77,7 +71,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add Product to Consider</Modal.Title>
+          <Modal.Title>
+            {editProduct ? "Edit Product" : "Add Product to Consider"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={submitHandler}>
@@ -86,30 +82,25 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 <input
                   type="text"
                   className="form-control"
-                  id="exampleFormControlInput1"
                   placeholder="Enter product name.."
                   onChange={titleChangeHandler}
                   value={ProductName}
+                  id="exampleFormControlInput1"
                   required
                 />
               </div>
               <div className="col-md-12 mb-3">
                 <div className="input-group">
                   <div className="input-group-prepend">
-                    <span
-                      className="input-group-text"
-                      id="exampleFormControlInput2"
-                    >
-                      $
-                    </span>
+                    <span className="input-group-text">$</span>
                   </div>
                   <input
                     className="form-control"
-                    id="exampleFormControlInput3"
                     type="number"
                     placeholder="Enter product price.."
                     onChange={priceChangeHandler}
                     value={ProductPrice}
+                    id="exampleFormControlInput2"
                     required
                   />
                 </div>
@@ -118,10 +109,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 <input
                   type="text"
                   className="form-control"
-                  id="exampleFormControlInput4"
                   placeholder="Enter product URL"
                   onChange={urlChangeHandler}
                   value={ProductUrl}
+                  id="exampleFormControlInput3"
                   required
                 />
               </div>
@@ -129,10 +120,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 <label htmlFor="exampleFormControlTextarea1">Detail</label>
                 <textarea
                   className="form-control"
-                  id="exampleFormControlTextarea1"
                   rows={3}
                   onChange={textChangeHandler}
                   value={ProductText}
+                  id="exampleFormControlTextarea1"
                 ></textarea>
               </div>
             </div>
@@ -142,7 +133,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
               className="justify-content-end pt-5"
             >
               <Button type="submit" variant="outline-success">
-                Add Product
+                {editProduct ? "Save Changes" : "Add Product"}
               </Button>
               <Button
                 variant="outline-danger"

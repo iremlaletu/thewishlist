@@ -1,10 +1,12 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 import { ShoppingCart } from "../components/ShoppingCart";
 import { CartItem } from "../components/CartItem";
+import { Product } from "../types";
 
 type ShoppingCartProviderProps = {
   children: ReactNode;
 };
+
 type ShoppingCartContext = {
   openCart: () => void;
   closeCart: () => void;
@@ -15,19 +17,13 @@ type ShoppingCartContext = {
   cartQuantity: number;
   cartItems: CartItem[];
   addProduct: (product: Product) => void;
+  updateProduct: (product: Product) => void;
   products: Product[]; // Ürünler listesi
 };
+
 type CartItem = {
   id: number;
   quantity: number;
-};
-
-type Product = {
-  id: number;
-  ProductName: string;
-  ProductUrl: string;
-  ProductPrice: number;
-  ProductText: string;
 };
 
 const ShoppingCartContext = createContext({} as ShoppingCartContext);
@@ -86,7 +82,19 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     });
   }
   function addProduct(product: Product) {
-    setProducts((currProducts) => [...currProducts, product]);
+    setProducts((currProducts) => {
+      if (currProducts.find((item) => item.id === product.id)) {
+        return currProducts; // Ürün zaten varsa ekleme
+      }
+      return [...currProducts, product];
+    });
+  }
+  function updateProduct(updatedProduct: Product) {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === updatedProduct.id ? updatedProduct : product
+      )
+    );
   }
 
   return (
@@ -101,6 +109,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         openCart,
         closeCart,
         addProduct,
+        updateProduct,
         products,
       }}
     >

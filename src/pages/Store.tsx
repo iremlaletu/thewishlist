@@ -6,6 +6,7 @@ import { useShoppingCart } from "../context/ShoppingCartContext";
 
 const Store = () => {
   const { products } = useShoppingCart();
+
   return (
     <>
       <h1>Your Store</h1>
