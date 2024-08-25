@@ -75,6 +75,9 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     setProducts((currProducts) => {
       return currProducts.filter((item) => item.id !== id);
     });
+    setCartItems((currItems) => {
+      return currItems.filter((item) => item.id !== id);
+    });
   };
 
   const cartQuantity = cartItems.reduce(
