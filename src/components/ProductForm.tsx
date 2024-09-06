@@ -3,20 +3,19 @@ import { Button, Modal, Stack } from "react-bootstrap";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 
 const ProductForm: React.FC = () => {
-  const {
-    isFormOpen,
-    productToEdit,
-    handleFormSubmit,
-    closeProductForm,
-    products,
-  } = useShoppingCart();
-  const [formData, setFormData] = useState({
+  const { isFormOpen, productToEdit, handleFormSubmit, closeProductForm } =
+    useShoppingCart();
+
+  // Helper function to reset the form data
+  const resetForm = () => ({
     id: 0,
     ProductName: "",
     ProductPrice: "",
     ProductUrl: "",
     ProductText: "",
   });
+
+  const [formData, setFormData] = useState(resetForm);
 
   useEffect(() => {
     if (productToEdit && isFormOpen) {
@@ -27,31 +26,26 @@ const ProductForm: React.FC = () => {
         ProductUrl: productToEdit.ProductUrl,
         ProductText: productToEdit.ProductText,
       });
-    } else if (!productToEdit && isFormOpen) {
-      setFormData({
-        id: 0,
-        ProductName: "",
-        ProductPrice: "",
-        ProductUrl: "",
-        ProductText: "",
-      });
+    } else if (isFormOpen) {
+      setFormData(resetForm());
     }
   }, [productToEdit, isFormOpen]);
 
+  // Helper function to handle input changes
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
   };
 
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
     const updatedProductData = {
-      id: productToEdit ? productToEdit.id : products.length + 1,
+      id: productToEdit ? productToEdit.id : Date.now(),
       ProductName: formData.ProductName,
       ProductUrl: formData.ProductUrl,
       ProductPrice: parseFloat(formData.ProductPrice),

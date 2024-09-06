@@ -2,6 +2,7 @@ import { ReactNode, createContext, useContext, useState } from "react";
 import { ShoppingCart } from "../components/ShoppingCart";
 import { CartItem } from "../components/CartItem";
 import { Product } from "../types";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 type ShoppingCartProviderProps = {
   children: ReactNode;
@@ -24,6 +25,8 @@ type ShoppingCartContext = {
   handleAddProduct: () => void;
   handleFormSubmit: (product: Product) => void;
   removeProduct: (id: number) => void;
+  toggleExplanation: () => void;
+  showExplanation: boolean;
 };
 
 type CartItem = {
@@ -38,11 +41,22 @@ export function useShoppingCart() {
 }
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(
+    "cart-items",
+    []
+  );
   const [isOpen, setIsOpen] = useState(false);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useLocalStorage<Product[]>(
+    "product-items",
+    []
+  );
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState<Product | null>(null);
+  const [showExplanation, setShowExplanation] = useState(false);
+
+  const toggleExplanation = () => {
+    setShowExplanation((prev) => !prev);
+  };
 
   const handleAddProduct = () => {
     setProductToEdit(null); // Reset form for new product
@@ -144,6 +158,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         handleAddProduct,
         handleFormSubmit,
         removeProduct,
+        toggleExplanation,
+        showExplanation,
       }}
     >
       {children}
