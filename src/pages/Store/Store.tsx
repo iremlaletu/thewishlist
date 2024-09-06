@@ -1,8 +1,8 @@
 import { Button, Col, Row, Stack } from "react-bootstrap";
-import transition from "../components/transition";
-import { StoreItem } from "../components/StoreItem";
-import ProductForm from "../components/ProductForm";
-import { useShoppingCart } from "../context/ShoppingCartContext";
+import transition from "../../components/transition";
+import { StoreItem } from "../../components/StoreItem";
+import ProductForm from "../../components/ProductForm";
+import { useShoppingCart } from "../../context/ShoppingCartContext";
 
 const Store = () => {
   const { products, handleAddProduct, toggleExplanation, showExplanation } =

@@ -1,5 +1,5 @@
 import "../styles/home.css";
-import transition from "../components/transition";
+import transition from "../../components/transition";
 const Home = () => {
   return (
     <div className="home-container d-flex align-items-center justify-content-center">
