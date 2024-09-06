@@ -1,4 +1,4 @@
-import "../styles/home.css";
+import "../../styles/home.css";
 import transition from "../../components/transition";
 const Home = () => {
   return (
