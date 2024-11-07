@@ -10,7 +10,8 @@ const Store = () => {
   //console.log("Current products:", products);
   return (
     <>
-      <h1>Your Store</h1>
+      <h1>Create Your Store</h1>
+
       <Stack direction="horizontal" gap={3} className="pt-5">
         <Button
           onClick={toggleExplanation}

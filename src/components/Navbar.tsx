@@ -7,12 +7,12 @@ const Navbar = () => {
   return (
     <NavbarBs sticky="top" className="bg-white shadow-sm mb-3">
       <Container>
-        <Nav className="me-auto">
+        <Nav className="me-auto gap-5">
           <Nav.Link to="/" as={NavLink}>
             Home
           </Nav.Link>
           <Nav.Link to="/store" as={NavLink}>
-            Store
+            Your List
           </Nav.Link>
         </Nav>
         {cartQuantity > 0 && (
